@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<workspace>
+	<settings>
+		<label>igpp-tools</label>
+	</settings>
+	<users>
+		<user>
+			<path>igpp-tools.jcu</path>
+		</user>
+	</users>
+	<projects>
+		<project>
+			<path>..\src\Monitor\monitor.jcp</path>
+		</project>
+		<project>
+			<path>..\src\webcp\webcp.jcp</path>
+		</project>
+		<project>
+			<path>..\src\md5check\md5check.jcp</path>
+		</project>
+	</projects>
+</workspace>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<workspace_user>
+	<active_project>
+		<label>webcp</label>
+	</active_project>
+	<projects>
+		<project>
+			<label>monitor</label>
+			<showfiles>false</showfiles>
+		</project>
+		<project>
+			<label>webcp</label>
+			<showfiles>false</showfiles>
+		</project>
+		<project>
+			<label>md5check</label>
+			<showfiles>false</showfiles>
+		</project>
+	</projects>
+	<open_files>
+		<docitem>
+			<path>..\src\Monitor\Task.java</path>
+			<source>true</source>
+			<index>0</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>..\src\Monitor\FileItem.java</path>
+			<source>true</source>
+			<index>1</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>..\src\Monitor\Monitor.java</path>
+			<source>true</source>
+			<index>2</index>
+			<active>false</active>
+		</docitem>
+		<docitem>
+			<path>..\src\webcp\Webcp.java</path>
+			<source>true</source>
+			<index>3</index>
+			<active>true</active>
+		</docitem>
+	</open_files>
+</workspace_user>
