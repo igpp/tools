@@ -12,5 +12,8 @@
     <property name="release.user"  value="tking"/>
     <property name="release.host"  value="release.igpp.ucla.edu"/>
     <property name="release.path"  value="/var/www/release/root/applications/igpp/tools"/>
+    <property name="release.local"   value="/java/jre/lib/ext" />
+    <property name="release.jar"   value="/projects/jar/igpp" />
+    <property name="release.dist"   value="/projects/dist/igpp" />
     <property name="main-class"   value="igpp.tools.HelloWorld"/>
 </project>
