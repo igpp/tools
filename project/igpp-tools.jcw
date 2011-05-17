@@ -11,13 +11,13 @@
 	</users>
 	<projects>
 		<project>
-			<path>..\src\Monitor\monitor.jcp</path>
+			<path>..\src\md5check\md5check.jcp</path>
 		</project>
 		<project>
 			<path>..\src\webcp\webcp.jcp</path>
 		</project>
 		<project>
-			<path>..\src\md5check\md5check.jcp</path>
+			<path>..\src\Monitor\monitor.jcp</path>
 		</project>
 	</projects>
 </workspace>
