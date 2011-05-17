@@ -1,6 +1,6 @@
 package igpp.tools;
 
-import pds.util.PPIUtil;
+import java.io.File;
 
 /**
  * Simplified interface for file information.
@@ -37,14 +37,37 @@ public class FileItem extends Object
 	
 	public String getName() 
 	{
-		return PPIUtil.filename(mPathName);
+		File pathname = new File (mPathName);		
+		return pathname.getName();
 	}
 	
 	public String getParent() 
 	{
-		return PPIUtil.parent(mPathName);
+		File pathname = new File (mPathName);		
+		return pathname.getParent();
 	}
 	
+	public String getBaseName() 
+	{
+		java.io.File file = new java.io.File (mPathName);		
+		String base = file.getName();
+		int n = base.lastIndexOf(".");
+		if(n != -1) base = base.substring(0, n);
+		
+		return base;
+	}
+	
+	public String getExtension() 
+	{
+		java.io.File file = new java.io.File (mPathName);		
+		String ext = file.getName();
+		int n = ext.lastIndexOf(".");
+		if(n != -1) ext = ext.substring(n);
+		else ext = "";
+		
+		return ext;
+	}
+
 	public void setIsDirectory(boolean state)
 	{
 		mIsDirectory = state;

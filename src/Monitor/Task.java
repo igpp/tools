@@ -5,10 +5,9 @@ import java.lang.Thread;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Iterator;
-import pds.util.PPIUtil;
-import pds.util.PPIOption;
-import pds.util.PPIProcess;
-import pds.util.PPIVariableList;
+import igpp.util.Option;
+import igpp.util.Process;
+import igpp.util.VariableList;
 import pds.label.*;
 
 
@@ -313,11 +312,11 @@ public class Task extends Thread
      	Iterator	procIt;
      	int			i;
      	boolean		success;
-     	PPIProcess	process = new PPIProcess();
+     	Process	process = new Process();
      	String[]	part;
      	
-     	PPIVariableList variable = new PPIVariableList();
-     	PPIVariableList command = new PPIVariableList();
+     	VariableList variable = new VariableList();
+     	VariableList command = new VariableList();
      	
      	// Build up a list of files
      	if(mLog) System.out.println("Checking: " + pathName);
@@ -368,8 +367,8 @@ public class Task extends Thread
      		}
      		
      		variable.findAndSet("filename", item.getName());
-     		variable.findAndSet("basename", PPIUtil.basename(item.getName()));
-     		variable.findAndSet("extension", PPIUtil.extension(item.getName()));
+     		variable.findAndSet("basename", item.getBaseName());
+     		variable.findAndSet("extension", item.getExtension());
      		variable.findAndSet("pathname", item.getPathName());
      		variable.findAndSet("path", item.getParent());
      		
