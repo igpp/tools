@@ -6,7 +6,7 @@
 	</active_project>
 	<projects>
 		<project>
-			<label>md5check</label>
+			<label>monitor</label>
 			<showfiles>false</showfiles>
 		</project>
 		<project>
@@ -14,7 +14,7 @@
 			<showfiles>false</showfiles>
 		</project>
 		<project>
-			<label>monitor</label>
+			<label>md5check</label>
 			<showfiles>false</showfiles>
 		</project>
 	</projects>
@@ -23,7 +23,7 @@
 			<path>..\src\Monitor\Task.java</path>
 			<source>true</source>
 			<index>0</index>
-			<active>true</active>
+			<active>false</active>
 		</docitem>
 		<docitem>
 			<path>..\src\Monitor\FileItem.java</path>
@@ -35,7 +35,7 @@
 			<path>..\src\Monitor\Monitor.java</path>
 			<source>true</source>
 			<index>2</index>
-			<active>false</active>
+			<active>true</active>
 		</docitem>
 		<docitem>
 			<path>..\src\webcp\Webcp.java</path>
