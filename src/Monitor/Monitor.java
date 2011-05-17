@@ -3,7 +3,7 @@ package igpp.tools;
 //import pds.label.*;
 import pds.label.PDSLabel;
 import pds.label.PDSItem;
-import igpp.web.Mailer;
+import igpp.web.SMTPMail;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -168,7 +168,7 @@ public class Monitor extends Thread
      			}
 		     	if(mSMTPHost.length() > 0) {
 		     		output = task.getOutput();
-		     		Mailer.send(mSMTPHost, task.getNotify(), task.getEmailSubject(), output, mFrom);
+		     		SMTPMail.send(mSMTPHost, task.getNotify(), task.getEmailSubject(), output, mFrom);
 		     	}
      		} catch(Exception e) {
      			e.printStackTrace(System.out);
