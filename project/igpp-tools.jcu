@@ -2,11 +2,11 @@
 
 <workspace_user>
 	<active_project>
-		<label>md5check</label>
+		<label>monitor</label>
 	</active_project>
 	<projects>
 		<project>
-			<label>monitor</label>
+			<label>md5check</label>
 			<showfiles>false</showfiles>
 		</project>
 		<project>
@@ -14,7 +14,7 @@
 			<showfiles>false</showfiles>
 		</project>
 		<project>
-			<label>md5check</label>
+			<label>monitor</label>
 			<showfiles>false</showfiles>
 		</project>
 	</projects>
