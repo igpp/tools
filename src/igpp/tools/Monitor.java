@@ -3,12 +3,17 @@ package igpp.tools;
 //import pds.label.*;
 import pds.label.PDSLabel;
 import pds.label.PDSItem;
+
 import igpp.web.SMTPMail;
+
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.ArrayList;
+
 import java.lang.Thread;
+
+import javax.mail.MessagingException;
 
 /**
  * Monitor one or more directories for new files and perform a task on each.
