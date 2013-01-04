@@ -6,7 +6,8 @@
 #
 # Version: $Id: collator 2 2009-03-05 16:57:37Z tking $
 
-THIS_DIR=`dirname $0`
+MY_DIR=`readlink -nf $0`
+THIS_DIR=`dirname $MY_DIR`
 
 # Executes tool
 # Arguments are passed in to the tool via '$@'

@@ -214,11 +214,11 @@ class md5check {
 	/** 
 	 * Determine the checksum for a file or all files in a directory.
 	 * 
-	 * If recusion is enabled, all sub-directories are also checked.
+	 * If recursion is enabled, all sub-directories are also checked.
 	 * For each file the calculate a checksum and write a checksum record.
 	 * If an update list is specified also update the entry in the specified list.
 	 *
-	 * @param path  the path to the file or directory to calaculate the checksum.
+	 * @param path  the path to the file or directory to calculate the checksum.
 	 *
 	 **/
 	public void checksum(String path)
