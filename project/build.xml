@@ -22,8 +22,6 @@
                directory exists.
       dist     builds the jar, api and kit targets and assembles a zip file
                at: ${dist.dir}/${package.name}-${version}-dist.zip
-      kit      builds the bin, jar, and api and assembles a zip file
-               at: ${kit.dir}/${package.name}-${version}-kit.zip
       api      builds the API documentation for the project and places
                it in: ${api.dir}
       
@@ -65,8 +63,7 @@
     <property name="jar.dir"      value="${build.dir}/jar"/>
     <property name="war.dir"      value="${build.dir}/war"/>
     <property name="api.dir"      value="${build.dir}/api"/>
-    <property name="kit.dir"      value="${build.dir}/kit"/>
-    <property name="bin-kit.dir"  value="${build.dir}/bin"/>
+    <property name="kit.dir"      value="${build.dir}/bin"/>
     <property name="report.dir"   value="${build.dir}/junitreport"/>
 
     <!-- Where to look for local jar dependencies. Used when running tests -->
@@ -86,7 +83,6 @@
        <echo message="   jar: Compile source and create jar file. Depends on: compile"/>
        <echo message="   war: Compile source and create war file. Depends on: compile"/>
        <echo message="   bin: Build command-line utilities."/>
-       <echo message="   kit: Build a distribution kit which contains everything."/>
        <echo message="   api: Create the API documentation."/>
        <echo message="   dist: Build a distribution kit which contains everything. Depends on: jar,api,kit"/>
        <echo message="   run: Run the executable jar file to test the packaging. Depends on: jar"/>
@@ -145,50 +141,36 @@
 
     <!-- Construct a self-contained "bin" directory for command-line tools -->
     <target name="bin" depends="bin.check" if="bin.run" >
-        <mkdir dir="${bin-kit.dir}"/>
-        <mkdir dir="${bin-kit.dir}/jar"/>
-        <copy todir="${bin-kit.dir}">
+        <mkdir dir="${kit.dir}"/>
+    	<delete dir="${kit.dir}/jar"/>
+        <mkdir dir="${kit.dir}/jar"/>
+        <copy todir="${kit.dir}">
            <fileset dir="${bin.dir}"/>
         </copy>
-        <copy todir="${bin-kit.dir}/jar">
-           <fileset dir="${jar.dir}" />
+        <copy todir="${kit.dir}/jar">
+           <fileset file="${jar.dir}/${package.name}-${version}.jar" />
         </copy>
-        <copy todir="${bin-kit.dir}/jar">
+        <copy todir="${kit.dir}/jar">
            <fileset dir="${lib.dir}" erroronmissingdir="false" />
         </copy>
     </target>
     
     <!-- Build a distribution kit which contains everything -->
-    <target name="dist" depends="jar,api,kit">
+    <target name="dist" depends="jar,api,bin">
         <mkdir dir="${dist.dir}"/>
         <zip destfile="${dist.dir}/${package.name}-${version}-dist.zip">
-            <zipfileset dir="${jar.dir}" prefix="jar" />
-            <zipfileset dir="${api.dir}" prefix="api" />
-            <zipfileset dir="${lib.dir}" prefix="lib" erroronmissingdir="false" />
-            <zipfileset dir="${lib.dir}" prefix="lib" erroronmissingdir="false" />
-            <zipfileset dir="${bin-kit.dir}" prefix="bin" erroronmissingdir="false" />
-            <zipfileset dir="${project.dir}" includes="LICENSE.TXT" erroronmissingdir="false" />
-            <zipfileset dir="${project.dir}" includes="README.TXT" erroronmissingdir="false" />
-            <zipfileset dir="${doc.dir}" prefix="doc" includes="**/*.pdf" erroronmissingdir="false" />
-            <zipfileset dir="${tutorial.dir}" prefix="tutorial" includes="**/*.pdf" erroronmissingdir="false" />
-            <zipfileset dir="${example.dir}" prefix="example" erroronmissingdir="false" />
-            <zipfileset dir="${xsd.dir}" prefix="xsd" erroronmissingdir="false" />
-            <zipfileset dir="${conf.dir}" prefix="conf" erroronmissingdir="false" />
-        </zip>
-    </target>
-
-    <!-- Build a distribution kit which contains everything -->
-    <target name="kit" depends="bin,jar,api" if="bin.run" >
-        <mkdir dir="${kit.dir}"/>
-        <zip destfile="${kit.dir}/${package.name}-${version}-kit.zip">
-            <zipfileset dir="${bin-kit.dir}" prefix="bin" erroronmissingdir="false" />
-            <zipfileset dir="${project.dir}" includes="LICENSE.TXT" erroronmissingdir="false" />
-            <zipfileset dir="${project.dir}" includes="README.TXT" erroronmissingdir="false" />
-            <zipfileset dir="${doc.dir}" prefix="doc" includes="**/*.pdf" erroronmissingdir="false" />
-            <zipfileset dir="${tutorial.dir}" prefix="tutorial" includes="**/*.pdf" erroronmissingdir="false" />
-            <zipfileset dir="${example.dir}" prefix="example" erroronmissingdir="false" />
-            <zipfileset dir="${xsd.dir}" prefix="xsd" erroronmissingdir="false" />
-            <zipfileset dir="${conf.dir}" prefix="conf" erroronmissingdir="false" />
+            <zipfileset dir="${jar.dir}" prefix="${package.name}-${version}/jar" />
+            <zipfileset dir="${api.dir}" prefix="${package.name}-${version}/api" />
+            <zipfileset dir="${lib.dir}" prefix="${package.name}-${version}/lib" erroronmissingdir="false" />
+            <zipfileset dir="${lib.dir}" prefix="${package.name}-${version}/lib" erroronmissingdir="false" />
+            <zipfileset dir="${kit.dir}" prefix="${package.name}-${version}/bin" erroronmissingdir="false" />
+            <zipfileset dir="${project.dir}" includes="${package.name}-${version}/LICENSE.TXT" erroronmissingdir="false" />
+            <zipfileset dir="${project.dir}" includes="${package.name}-${version}/README.TXT" erroronmissingdir="false" />
+            <zipfileset dir="${doc.dir}" prefix="${package.name}-${version}/doc" includes="**/*.pdf" erroronmissingdir="false" />
+            <zipfileset dir="${tutorial.dir}" prefix="${package.name}-${version}/tutorial" includes="**/*.pdf" erroronmissingdir="false" />
+            <zipfileset dir="${example.dir}" prefix="${package.name}-${version}/example" erroronmissingdir="false" />
+            <zipfileset dir="${xsd.dir}" prefix="${package.name}-${version}/xsd" erroronmissingdir="false" />
+            <zipfileset dir="${conf.dir}" prefix="${package.name}-${version}/conf" erroronmissingdir="false" />
         </zip>
     </target>
 
@@ -262,9 +244,6 @@
        </scp>
        <scp todir="${release.user}@${release.host}:${release.path}/lib" password="${release.password}" >
           <fileset dir="${lib.dir}"       erroronmissingdir="false" />
-       </scp>
-       <scp todir="${release.user}@${release.host}:${release.path}/kit" password="${release.password}" >
-          <fileset dir="${kit.dir}"       erroronmissingdir="false" />
        </scp>
        <scp todir="${release.user}@${release.host}:${release.path}/dist" password="${release.password}" >
           <fileset dir="${dist.dir}"       erroronmissingdir="false" />

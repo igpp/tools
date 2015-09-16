@@ -1,7 +1,5 @@
 package igpp.tools;
 
-import igpp.util.Digest;
-
 import java.io.File;
 import java.io.FileFilter;
 

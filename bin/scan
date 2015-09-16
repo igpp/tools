@@ -14,4 +14,4 @@ THIS_DIR=$(cd "$MY_PATH" && echo "$(pwd -P)") # like "readlink -nf"
 # Executes tool
 # Arguments are passed in to the tool via '$@'
 
-java -Djava.ext.dirs=${THIS_DIR}/jar igpp.tools.Monitor "$@"
+java -Djava.ext.dirs=${THIS_DIR}/jar igpp.tools.Scan "$@"

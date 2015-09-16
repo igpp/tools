@@ -12,5 +12,5 @@ set THIS_DIR=%~dp0
 :: The special variable '%*' allows the arguments
 :: to be passed into the executable.
 
-java -Djava.ext.dirs=%THIS_DIR%jar igpp.tools.Monitor %*
+java -Djava.ext.dirs=%THIS_DIR%jar igpp.tools.Scan %*
 :END

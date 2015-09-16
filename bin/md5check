@@ -6,8 +6,10 @@
 #
 # Version: $Id: collator 2 2009-03-05 16:57:37Z tking $
 
-MY_DIR=`readlink -nf $0`
-THIS_DIR=`dirname $MY_DIR`
+# Get absolute path
+MY_PATH=$(dirname $0)   # Pure bash ${0%/*}
+if [ "$MY_PATH" == "" ]; then $MY_PATH = "."; fi
+THIS_DIR=$(cd "$MY_PATH" && echo "$(pwd -P)") # like "readlink -nf"
 
 # Executes tool
 # Arguments are passed in to the tool via '$@'

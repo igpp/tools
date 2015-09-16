@@ -2,10 +2,7 @@ package igpp.tools;
 
 import java.io.File;
 import java.lang.Thread;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Iterator;
-import igpp.util.Option;
 import igpp.util.Process;
 import igpp.util.VariableList;
 import pds.label.*;
@@ -23,17 +20,17 @@ public class Task extends Thread
 	
 	String	mPathName;
 	String	mFilter;
-	ArrayList	mProcess = new ArrayList();
+	ArrayList<String>	mProcess = new ArrayList<String>();
 	String	mProject = null;
 	String	mSubject = "Unknown";
 	String	mSuccessMessage = "";
 	String	mFailureMessage = "";
 	boolean	mRecurse = false;
-	ArrayList	mOutput = new ArrayList();
-	ArrayList	mNotify = new ArrayList();
+	ArrayList<String>	mOutput = new ArrayList<String>();
+	ArrayList<String>	mNotify = new ArrayList<String>();
 	String		mLister = "";
 	boolean		mLog = false;
-	ArrayList	mDirStack = new ArrayList();
+	ArrayList<String>	mDirStack = new ArrayList<String>();
 	int			mItemsProcessed = 0;
 	
 	/**
@@ -50,7 +47,7 @@ public class Task extends Thread
     /**
      * Create instance
      **/
-    void Task()
+    Task()
     {
     	mPathName = "";
     	mFilter = "";
@@ -111,7 +108,7 @@ public class Task extends Thread
      *
      * @return {@link ArrayList} of recipients.
      **/
-    public ArrayList getNotify()
+    public ArrayList<String> getNotify()
     {
     	return mNotify;
     } 
@@ -272,7 +269,7 @@ public class Task extends Thread
       * @return an {@link ArrayList} containing the task output.
       *
       **/
-     public ArrayList getOutput()
+     public ArrayList<String> getOutput()
      {
      	  return mOutput;
      } 
@@ -304,12 +301,7 @@ public class Task extends Thread
       public void doTask(String pathName)
       {
      	String	buffer;
-     	String	absPath;
-     	File	tempFile;
-     	ArrayList	list = new ArrayList();
-     	FileItem	item;
-     	Iterator	listIt;
-     	Iterator	procIt;
+     	ArrayList<FileItem>	list = new ArrayList<FileItem>();
      	int			i;
      	boolean		success;
      	Process	process = new Process();
@@ -326,15 +318,13 @@ public class Task extends Thread
      		buffer = command.replaceVariable(mLister);
      		if(mLog) System.out.println("Lister: " + buffer);
      		process.run(buffer);
-			ArrayList output = process.getOutput();
+			ArrayList<String> output = process.getOutput();
 			if(output.size() == 0) return;	// Nothing to do
-			Iterator it = output.iterator();
-			while(it.hasNext()) {
-				buffer = (String) it.next();
-				part = buffer.split(" +", 9);
+			for(String o : output) {
+				part = o.split(" +", 9);
 				if(part.length != 9) continue;	// Invalid "ls -l" format
-				item = new FileItem(pathName + "/" + part[8]);
-				item.setIsDirectory(buffer.charAt(0) == 'd');
+				FileItem item = new FileItem(pathName + "/" + part[8]);
+				item.setIsDirectory(o.charAt(0) == 'd');
 				list.add(item);
 			}
      	} else {
@@ -346,7 +336,7 @@ public class Task extends Thread
 	     	}
 	     	if(fList.length == 0) return;	// Nothing to do
 	     	for(i = 0; i < fList.length; i++) {
-	     		item = new FileItem(fList[i].getAbsolutePath());
+	     		FileItem item = new FileItem(fList[i].getAbsolutePath());
 	     		item.setIsDirectory(fList[i].isDirectory());
 	     		list.add(item);
 	     	}
@@ -355,9 +345,7 @@ public class Task extends Thread
      	mItemsProcessed = list.size();
      	
      	// Process each file in the folder
-     	listIt = list.iterator();
-     	while(listIt.hasNext()) {
-     		item = (FileItem) listIt.next();
+     	for(FileItem item : list) {
      		if(item.isDirectory()) {
 		     	// If recursion is requested - do it for each folder.
      			if(mRecurse) {
@@ -378,9 +366,8 @@ public class Task extends Thread
      		
 	     	// Run the process
 	     	success = true;	
-     		procIt = mProcess.iterator();
-     		while(procIt.hasNext()) {
-	     		buffer = variable.replaceVariable((String) procIt.next());
+	     	for(String proc : mProcess) {
+	     		buffer = variable.replaceVariable(proc);
 	     		if(mLog) System.out.println("Run: " + buffer);
 	     		if(process.run(buffer) == 0) {	// Success
 	     			if(mSuccessMessage.length() == 0) {

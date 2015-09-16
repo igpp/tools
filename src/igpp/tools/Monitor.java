@@ -13,8 +13,6 @@ import java.util.ArrayList;
 
 import java.lang.Thread;
 
-import javax.mail.MessagingException;
-
 /**
  * Monitor one or more directories for new files and perform a task on each.
  *
@@ -32,7 +30,7 @@ public class Monitor extends Thread
 	String		mNotify = "";
 	String		mFrom = "";
 	boolean		mLog = false;
-	LinkedList	mTaskList = new LinkedList();
+	LinkedList<Task>	mTaskList = new LinkedList<Task>();
 	
 	/**
 	 * Command-line interface.
@@ -53,7 +51,7 @@ public class Monitor extends Thread
 	    	while(true) {
 	    		mon.run();
 				if(mon.mLog) System.out.println("Waiting: " + mon.mInterval + " seconds");		     	
-	    		mon.sleep(mon.mInterval * 1000);	// Milli seconds
+	    		Thread.sleep(mon.mInterval * 1000);	// Milli seconds
 	    	}
     	} catch(Exception e) {
     		e.printStackTrace(System.out);
@@ -153,22 +151,17 @@ public class Monitor extends Thread
      */
      public void run()
      {
-     	ListIterator it;
-		Task	task;
-		ArrayList	output;
+		ArrayList<String>	output;
 		
-     	it = mTaskList.listIterator();
-     	while(it.hasNext()) {
-     		task = (Task) it.next();
+   		for(Task task : mTaskList) {
      		task.run();
      		if(task.mItemsProcessed == 0) continue;	// Nothing processed - no message
      		
      		try {
      			if(task.mLog) {
      				output = task.getOutput();
-     				Iterator i = output.iterator();
-     				while(i.hasNext()) {
-     					System.out.println((String) i.next());
+     				for(String line : output) {
+     					System.out.println(line);
      				}	
      			}
 		     	if(mSMTPHost.length() > 0) {
