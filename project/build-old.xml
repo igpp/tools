@@ -18,11 +18,10 @@
                which is placed in: ${jar.dir}/${package.name}-${version}.jar
 
       bin      create a directory containing all scripts and jar files
-               for a standalone environment. Performed only if a "bin" 
+               for a standalone envrionment. Performed only if a "bin" 
                directory exists.
       dist     builds the jar, api and kit targets and assembles a zip file
                at: ${dist.dir}/${package.name}-${version}-dist.zip
-      kit      builds the bin, jar at: ${build.dir}/bin
       api      builds the API documentation for the project and places
                it in: ${api.dir}
       
@@ -35,7 +34,7 @@
       lib      Imported Java libraries go in to this directory
       src      source goes in under this tree in a hierarchy which matches the package names.
                The dependency rules of <javac> requires this.
-      tutorial Hand crafted tutorials (optional)
+      tutorial Hand crafted turorials (optional)
       example  Usage examples. (optional)
       conf     Configuration information (optional)
       xsd      XML schema documents (optional)
@@ -70,7 +69,6 @@
     <!-- Where to look for local jar dependencies. Used when running tests -->
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar" erroronmissingdir="false" />
-        <fileset dir="${release.local}" includes="**/*.jar" erroronmissingdir="false" />
     </path>
 
     <!-- Convenient targets -->
@@ -85,9 +83,7 @@
        <echo message="   jar: Compile source and create jar file. Depends on: compile"/>
        <echo message="   war: Compile source and create war file. Depends on: compile"/>
        <echo message="   bin: Build command-line utilities."/>
-       <echo message="   kit: Build a self-contained executable folder. "/>
        <echo message="   api: Create the API documentation."/>
-       <echo message="   doc: Create printable documentation."/>
        <echo message="   dist: Build a distribution kit which contains everything. Depends on: jar,api,kit"/>
        <echo message="   run: Run the executable jar file to test the packaging. Depends on: jar"/>
        <echo message="   junit: Perform JUnit testing. Depends on: jar"/>
@@ -103,20 +99,15 @@
     <!-- Compile source code -->
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
-        <javac includeantruntime="true" srcdir="${src.dir}" destdir="${classes.dir}" extdirs="${release.jar}" />
+        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}" extdirs="${release.jar};./lib" />
     </target>
 
     <!-- Create jar file for classes -->
     <target name="jar" depends="compile">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${package.name}-${version}.jar">
-         <fileset dir="${build.dir}/classes" />
-            <!-- Add contents of jar files to make stand-alone executable -->
-            <!-- Zip file example
-            <zipfileset src="${lib.dir}/commons-cli-1.2.jar" includes="**/*.class"/>
-            -->
-            <!-- Manifest to make executable -->
-            <manifest>
+        	   <fileset dir="${build.dir}/classes" />
+            <manifest> 
                 <!-- Make an executable jar - run main-class -->
                 <attribute name="Main-Class" value="${main-class}"/>
                 <!-- Who is building this jar? -->
@@ -129,14 +120,14 @@
         </jar>
     </target>
 
-    <!-- Create war file for classes -->
+    <!-- Create jar file for classes -->
     <target name="war" depends="jar">
         <mkdir dir="${war.dir}"/>
         <war destfile="${war.dir}/${package.name}-${version}.war" webxml="html/WEB-INF/web.xml">
            <fileset dir="html"/>
            <lib dir="lib"></lib>
            <lib dir="build/jar"></lib>
-           <!-- To include other files
+           	<!-- To include other files
            <zipfileset dir="src/graphics/images/gifs"
                        prefix="images"/>
            -->
@@ -149,7 +140,7 @@
 	</target>
 
     <!-- Construct a self-contained "bin" directory for command-line tools -->
-    <target name="kit" depends="bin.check" if="bin.run" >
+    <target name="bin" depends="bin.check" if="bin.run" >
         <mkdir dir="${kit.dir}"/>
     	<delete dir="${kit.dir}/jar"/>
         <mkdir dir="${kit.dir}/jar"/>
@@ -165,29 +156,22 @@
     </target>
     
     <!-- Build a distribution kit which contains everything -->
-    <target name="dist" depends="jar,api,doc,kit">
+    <target name="dist" depends="jar,api,bin">
         <mkdir dir="${dist.dir}"/>
-        <zip destfile="${dist.dir}/${package.name}-${version}.zip">
-            <zipfileset dir="${jar.dir}" prefix="${package.name}-${version}/lib" includes="**/${package.name}-${version}.jar" excludes="**/*-javadoc.jar"  />    <!-- Merge with all lib files -->
-            <zipfileset dir="${api.dir}" prefix="${package.name}-${version}/doc/api" />
-            <zipfileset dir="${lib.dir}" prefix="${package.name}-${version}/lib" excludes="**/*-javadoc.jar" erroronmissingdir="false" />
+        <zip destfile="${dist.dir}/${package.name}-${version}-dist.zip">
+            <zipfileset dir="${jar.dir}" prefix="${package.name}-${version}/jar" />
+            <zipfileset dir="${api.dir}" prefix="${package.name}-${version}/api" />
+            <zipfileset dir="${lib.dir}" prefix="${package.name}-${version}/lib" erroronmissingdir="false" />
+            <zipfileset dir="${lib.dir}" prefix="${package.name}-${version}/lib" erroronmissingdir="false" />
             <zipfileset dir="${kit.dir}" prefix="${package.name}-${version}/bin" erroronmissingdir="false" />
-            <zipfileset dir="${project.dir}" prefix="${package.name}-${version}" includes="LICENSE.TXT" erroronmissingdir="false" />
-            <zipfileset dir="${project.dir}" prefix="${package.name}-${version}" includes="README.TXT" erroronmissingdir="false" />
+            <zipfileset dir="${project.dir}" includes="${package.name}-${version}/LICENSE.TXT" erroronmissingdir="false" />
+            <zipfileset dir="${project.dir}" includes="${package.name}-${version}/README.TXT" erroronmissingdir="false" />
             <zipfileset dir="${doc.dir}" prefix="${package.name}-${version}/doc" includes="**/*.pdf" erroronmissingdir="false" />
-            <zipfileset dir="${build.dir}/doc" prefix="${package.name}-${version}/doc" includes="**/*.pdf" erroronmissingdir="false" />
             <zipfileset dir="${tutorial.dir}" prefix="${package.name}-${version}/tutorial" includes="**/*.pdf" erroronmissingdir="false" />
             <zipfileset dir="${example.dir}" prefix="${package.name}-${version}/example" erroronmissingdir="false" />
             <zipfileset dir="${xsd.dir}" prefix="${package.name}-${version}/xsd" erroronmissingdir="false" />
             <zipfileset dir="${conf.dir}" prefix="${package.name}-${version}/conf" erroronmissingdir="false" />
         </zip>
-        <copy todir="${dist.dir}">
-            <fileset dir="${build.dir}/doc" includes="**" />
-        </copy>
-        <mkdir dir="${dist.dir}/api"/>
-        <copy todir="${dist.dir}/api">
-            <fileset dir="${build.dir}/api" includes="**" />
-        </copy>
     </target>
 
     <!-- Create the API documentation -->
@@ -208,71 +192,15 @@
            <bottom><![CDATA[<i>${copyright}</i>]]></bottom>
            <link href="http://java.sun.com/j2se/1.5.0/docs/api"/>
          </javadoc>
-         
-        <!-- Build jar file containing javadoc --> 
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${package.name}-${version}-javadoc.jar">
-            <fileset dir="${api.dir}" />
-            <manifest> 
-                <!-- Who is building this jar? -->
-                <attribute name="Built-By" value="${user.name}"/>
-                <!-- Information about the program itself -->
-                <attribute name="Implementation-Vendor" value="${package.vendor}"/>
-                <attribute name="Implementation-Title" value="${pacakage.title}"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-            </manifest>
-        </jar>
-    </target>
+      </target>
 
-   <!-- Create documentation -->
-   <!-- Check if "doc" directory exists and set property for the "doc" target -->
-   <target name="doc.check">
-      <available file="${doc.dir}" type="dir" property="doc.run" />
-   </target>
-   
-   <!-- Process document source files -->
-   <target name="doc" depends="doc.check" if="doc.run">
-      <mkdir dir="${build.dir}/doc"/>
-      <!-- Create User's Guide -->
-      <mkdir dir="${build.dir}/doc/guide"/>
-      <exec executable="\tools\igpp\markdown\bin\md2pdf.bat" dir="${doc.dir}">
-         <!-- <arg value="-t"/> --> <!-- Create TOC -->
-         <arg value="-"/> <!-- Cover page -->
-         <arg value="guide/${package.name}.md" /> <!-- Source Markdown file -->
-         <arg value="../${build.dir}/doc/guide/${package.name}-${version}.pdf"/> <!-- Output -->
-      </exec>
-      <!-- Create Web pages -->
-      <copy todir="${build.dir}/doc" >
-         <fileset dir="${doc.dir}" includes="*.*" />
-      </copy>
-      <!-- Process and copy index.html to doc folder -->
-      <exec executable="\tools\igpp\docgen\bin\docgen.bat" dir="${doc.dir}">
-          <arg value="-o" /> <arg value="../${build.dir}/doc/index.html"/>   <!-- Output -->
-          <arg value="-f" /> <arg value="html"/>  <!-- Output Format -->
-          <arg value="package=${package.name}" /> <!-- Set variable "package" -->
-          <arg value="base=${package.base}" /> <!-- Set variable "base" -->
-          <arg value="version=${version}" /> <!-- Set variable "package" -->
-          <arg value="command=${package.command}" /> <!-- Set variable "command" -->
-          <arg value="index.html"/> <!-- Template -->
-      </exec>
-      <!-- Process and copy sidebar.js to doc folder -->
-      <exec executable="\tools\igpp\docgen\bin\docgen.bat" dir="${doc.dir}">
-          <arg value="-o" /> <arg value="../${build.dir}/doc/sidebar.js"/>   <!-- Output -->
-          <arg value="-f" /> <arg value="plain"/>  <!-- Output Format -->
-          <arg value="package=${package.name}" /> <!-- Set variable "package" -->
-          <arg value="base=${package.base}" /> <!-- Set variable "base" -->
-          <arg value="version=${version}" /> <!-- Set variable "package" -->
-          <arg value="command=${package.command}" /> <!-- Set variable "command" -->
-          <arg value="sidebar.js"/> <!-- Template -->
-      </exec>
-   </target>
-
-	<!-- Perform JUnit testing -->
+    <!-- Perform JUnit testing -->
     <target name="junit" depends="jar">
-        <mkdir dir="${report.dir}" />
+        <mkdir dir="${report.dir}"/>
         <junit printsummary="yes">
             <classpath>
-                <path refid="classpath" />
+                <path refid="classpath"/>
+                <path refid="application"/>
             </classpath>
             
             <formatter type="xml"/>
@@ -301,12 +229,30 @@
     
     <!-- Copy files to the release web site -->
     <target name="publish" >
-      <input message="Password for ${release.user}:" addproperty="release.password" />
-      <echo message="${release.user}:${release.password}@${release.host}:${release.path}"/>
+    	<input message="Password for ${release.user}:" addproperty="release.password" />
+    	<echo message="${release.user}:${release.password}@${release.host}:${release.path}"/>
 
-      <!-- Copy files -->
+    	<!-- Copy files -->
        <scp todir="${release.user}@${release.host}:${release.path}" password="${release.password}" >
-          <fileset dir="${dist.dir}" includes="**"  />
+          <fileset dir="${project.dir}" includes="info.htm"  erroronmissingdir="false" />
+       </scp>
+       <scp todir="${release.user}@${release.host}:${release.path}/api" password="${release.password}" >
+          <fileset dir="${api.dir}"       erroronmissingdir="false" />
+       </scp>
+       <scp todir="${release.user}@${release.host}:${release.path}/jar" password="${release.password}" >
+          <fileset dir="${jar.dir}"       erroronmissingdir="false" />
+       </scp>
+       <scp todir="${release.user}@${release.host}:${release.path}/lib" password="${release.password}" >
+          <fileset dir="${lib.dir}"       erroronmissingdir="false" />
+       </scp>
+       <scp todir="${release.user}@${release.host}:${release.path}/dist" password="${release.password}" >
+          <fileset dir="${dist.dir}"       erroronmissingdir="false" />
+       </scp>
+       <scp todir="${release.user}@${release.host}:${release.path}/doc" password="${release.password}" >
+          <fileset dir="${doc.dir}" includes="**/*.pdf" erroronmissingdir="false" />
+       </scp>
+       <scp todir="${release.user}@${release.host}:${release.path}/tutorial" password="${release.password}" >
+          <fileset dir="${tutorial.dir}" includes="**/*.pdf" erroronmissingdir="false" />
        </scp>
     </target>
 </project>
