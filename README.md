@@ -10,3 +10,5 @@ Collection of tools for data movement and maintenance. Includes the following to
 **igpp.tools.Scan** Scan portions of a file system and determine the minimum and maximum values for creation date, modification date and size.
 
 **igpp.tools.Webcp** Copy files from the web given a URL to the local system. A very simple tool similar to curl or wget.
+
+Documentation for each tool can be viewed by passing the "-h" options to the tool. 
