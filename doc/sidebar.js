@@ -13,7 +13,7 @@ var html = [
 '         <li class="nav-header">Quick Links</li>',
 '         <li><a href="api/index.html">Class API</a></li>',
 '         <li><a href="example/index.html">Examples</a></li>',
-'         <li><a href="http://${options.host}/${options.home}/${options.package}-${options.version}.zip">Download</a></li>',
+'         <li><a href="${options.package}-${options.version}.zip">Download</a></li>',
 '         <li><a href="https://github.com/${options.home}">Source Code</a></li>',
 '      </ul>',
 '   </div><!-- well -->',

@@ -55,11 +55,12 @@ html.push(
 }
 
 function footer() {
+	var d = new Date();
    var html = [
 '</div><!-- row -->',
 '   <div class="row footer">',
 '      <div class="span12">',
-'        Copyright <a href="license.html">&copy;</a> 2013. Regents University of California.',
+'        Copyright <a href="license.html">&copy;</a>. Regents University of California.',
 '      </div>',
 '   </div>'
 ];
