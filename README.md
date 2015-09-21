@@ -21,27 +21,20 @@ Unzip the file where you would like the install the package. The package is self
 
 The distribution contains the following:
 
-**README.txt**
-
+**README.txt**   
     A README file directing the user to the available documentation for the project.
 	
-**LICENSE.txt**
-
+**LICENSE.txt**   
     The copyright notice from the Regents of the University of California detailing the restrictions regarding the use and distribution of this software. Although the license is strictly worded, the software has been classified as Technology and Software Publicly Available (TSPA) and is available for anyone to download and use.
     
-**bin/**
-
+**bin/**   
     This directory contains batch and shell scripts for executing the tool.
 
-**doc/**
-
+**doc/**   
     This directory contains a local web site with documentation, api javadoc, and other related information. Just point the desired web browser to the index.html file in this directory.
 	
-**examples/**
-
+**examples/**   
     This directory contains examples of using the tool.
 	
-**lib/**
-
+**lib/**   
     This directory contains the dependent jar files for the tool along with the executable jar file (igpp-docgen-1.3.0.jar) containing the igpp.docgen tool software.
-
